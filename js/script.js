@@ -73,6 +73,7 @@ function timer (id, deadline) {
         //проверяем не закончилась ли акция
         if(cTime.timeRemain <= 0) {
             clearInterval(timerID);
+            days.innerHTML = '00';
             hours.innerHTML = '00';
             minutes.innerHTML = '00';
             seconds.innerHTML = '00';
@@ -89,3 +90,39 @@ function timer (id, deadline) {
 
 //инициализируем таймер обратного отсчета
 timer('#timer', '2019-03-03 9:30');
+
+
+
+//================Модальное окно==================
+
+
+
+//функция принимает класс кнопки и класс отображаемого окна
+
+function openModal(btnClass, ovClass){
+    let btnMore = document.querySelector(btnClass);
+    let overlay = document.querySelector(ovClass);
+    //класс с кнопкой закрытия должен называться  popup-close и быть вложенным элементом
+    let close = overlay.querySelector('.popup-close');
+
+
+    btnMore.addEventListener('click', function() {
+        overlay.classList.add('show-overlay');
+        //при открытии модального окна блокируется прокрутка страницы
+        document.body.style.overflow = 'hidden'; 
+    });
+    
+    close.addEventListener('click', () => {
+        overlay.classList.remove('show-overlay');
+        document.body.style.overflow = '';
+    });
+
+};
+
+//вешаем модальное окно на кнопку "Узнать больше"
+openModal('.more', '.overlay');
+
+//вешаем модальное окно на кнопку "Узнать подробнее"
+openModal('.description-btn', '.overlay');
+
+
