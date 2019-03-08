@@ -146,7 +146,7 @@ form.addEventListener('submit', function(event) {
     form.appendChild(statusMessage);
 
     let request = new XMLHttpRequest();
-    request.open('POST', 'server.php');
+    request.open('POST', 'server.php'); // через post можно отправить данные на сервер
     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
     let formData = new FormData(form);
@@ -175,4 +175,95 @@ form.addEventListener('submit', function(event) {
     }
 });
 
+
+//--------SLIDER -------------//
+
+let slideIndex = 1;
+let slides = document.querySelectorAll('.slider-item');
+let dotsWrap = document.querySelector('.slider-dots');
+let dots = document.querySelectorAll('.dot');
+let prev = document.querySelector('.prev');
+let next = document.querySelector('.next');
+
+function showSlider(num = 0){
+    slideIndex = num;
+    slides.forEach( (item) => item.style.display = "none" );
+    slides[slideIndex].style.display = "block";
+
+    dots.forEach( (item) => item.classList.remove('dot-active') );
+    dots[slideIndex].classList.add('dot-active');
+
+}
+
+function changeSlide(num) {
+    slideIndex += num;
+    if (slideIndex < 0) slideIndex = slides.length - 1;
+    if (slideIndex >= slides.length) slideIndex = 0;
+    showSlider(slideIndex);
+}
+
+next.addEventListener('click', () => { 
+    changeSlide(1);
+});
+
+prev.addEventListener('click', () => { 
+    changeSlide(-1);
+});
+
+dotsWrap.addEventListener('click', function(e){
+    for (let i = 0; i < dots.length; i++){
+        if ( e.target == dots[i]){ // зачем-то пишут еще проверку e.target.classList.contains('dot')
+            showSlider(i);
+        }
+    }
+});
+
+showSlider(0);
+
+
+//===============CALCULATOR================
+
+let persons = document.querySelectorAll('.counter-block-input')[0];
+let days = document.querySelectorAll('.counter-block-input')[1];
+let totalSum = document.querySelector('#total');
+let place = document.querySelector('#select');
+
+let total = 0;
+let costDay = 200; //цена одного дня
+let p = '';
+let d = '';
+let pl = place.options[place.selectedIndex].value; // записывает значение текущего активного пункта
+
+//инициализация при загрузке страницы
+persons.value = '';
+days.value = '';
+totalSum.innerHTML = '0';
+
+
+persons.addEventListener('input', function(e){
+    p = this.value;
+    //console.log(p);
+    totalSum.innerHTML = getRezult();
+});
+
+days.addEventListener('input', function(){
+    d = this.value;
+    //console.log(d);
+    totalSum.innerHTML = getRezult();
+});
+
+place.addEventListener('change', function(){
+    pl = this.options[this.selectedIndex].value;
+    //console.log(d);
+    totalSum.innerHTML = getRezult();
+});
+
+function getRezult() {
+    if (p != '' && d != ''){
+        total = costDay * p * d * pl;
+        //console.log(total);
+        return total;
+    }
+    return 0;
+}
 
